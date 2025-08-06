@@ -98,7 +98,7 @@ const ProjectsShowcase = () => {
 
           {/* Soft Yellow Card */}
           <div className="col-span-12 md:col-span-6">
-            <div className="bg-[#F3EFA8] p-8 rounded-3xl shadow-lg hover:scale-105 transition duration-500 text-[#5A5200]">
+            <div className="bg-[#F5F8FF] p-8 rounded-3xl shadow-lg hover:scale-105 transition duration-500 text-[#2368AB]">
               <div className="text-4xl font-black mb-2">
                 Frequent Innovation Updates
               </div>

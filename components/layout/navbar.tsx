@@ -2,7 +2,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import { Menu } from "lucide-react";
+import {
+  Menu,
+  ChevronDown,
+  ChevronRight,
+  Home,
+  Users,
+  Mail,
+  Briefcase,
+} from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -18,12 +26,17 @@ import { motion, AnimatePresence } from "framer-motion";
 interface RouteProps {
   href: string;
   label: string;
+  icon?: React.ReactNode;
 }
 
 const routeList: RouteProps[] = [
-  { href: "/about", label: "About Us" },
-  { href: "/contact", label: "Contact Us" },
-  { href: "/careers", label: "Careers" }, // Added Careers
+  { href: "/about", label: "About Us", icon: <Users className="w-4 h-4" /> },
+  { href: "/contact", label: "Contact Us", icon: <Mail className="w-4 h-4" /> },
+  {
+    href: "/careers",
+    label: "Careers",
+    icon: <Briefcase className="w-4 h-4" />,
+  },
 ];
 
 const servicesList = [
@@ -36,6 +49,11 @@ const servicesList = [
 const dropdownVariants = {
   hidden: { opacity: 0, y: -10, scale: 0.95 },
   visible: { opacity: 1, y: 0, scale: 1 },
+};
+
+const mobileMenuVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 },
 };
 
 export const Navbar = () => {
@@ -54,14 +72,13 @@ export const Navbar = () => {
     setTimeoutId(id);
   };
 
-React.useEffect(() => {
-  return () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-  };
-}, [timeoutId]);
-
+  React.useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   React.useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -73,6 +90,7 @@ React.useEffect(() => {
     setIsOpen(false);
     setIsServicesOpen(false);
   };
+
   const handleDesktopServiceLinkClick = () => setIsServicesOpen(false);
 
   return (
@@ -113,37 +131,132 @@ React.useEffect(() => {
         <div className="lg:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button className="cursor-pointer h-6 w-6 text-slate-600 hover:text-blue-600 transition-transform">
-                <Menu />
-              </button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 text-slate-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="bg-white/95">
-              <div className="flex flex-col justify-between h-full">
-                <SheetHeader>
-                  <SheetTitle>
-                    <Link href="/" onClick={handleMobileLinkClick}>
-                      <Image src="/logo.png" alt="SyncNodeAI" width={32} height={32} />
-                      <span>SyncNodeAI</span>
+            <SheetContent
+              side="left"
+              className="w-80 bg-gradient-to-r from-blue-100 via-cyan-50 to-blue-50 border-blue-200/40 p-0"
+            >
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <SheetHeader className="p-6 border-b border-blue-200/40 text-white">
+                  <SheetTitle className="text-left">
+                    <Link
+                      href="/"
+                      onClick={handleMobileLinkClick}
+                      className="flex items-center space-x-3 group"
+                    >
+                      <Image
+                        src="/logo1.png"
+                        alt="SyncNodeAI"
+                        width={200}
+                        height={48}
+                        className="rounded"
+                      />
+                      {/* <span className="text-xl text-gray-800 font-bold tracking-wide">
+                        Sync<span className="text-[#2368AB]">NodeAI</span>
+                      </span> */}
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col gap-2">
-                  <Link href="/" onClick={handleMobileLinkClick}>Home</Link>
-                  <button onClick={() => setIsServicesOpen(!isServicesOpen)}>Services</button>
-                  {isServicesOpen && servicesList.map((s) => (
-                    <Link key={s.href} href={s.href} onClick={handleMobileLinkClick}>
-                      {s.label}
+
+                {/* Navigation Menu */}
+                <div className="flex-1 p-6 space-y-1 overflow-y-auto">
+                  {/* Home Link */}
+                  <motion.div
+                    variants={mobileMenuVariants}
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ delay: 0.1 }}
+                  >
+                    <Link
+                      href="/"
+                      onClick={handleMobileLinkClick}
+                      className="flex items-center space-x-3 p-3 rounded-lg text-slate-700 hover:text-blue-700 transition-all duration-200 group"
+                    >
+                      <Home className="w-5 h-5 text-blue-500 group-hover:text-blue-600" />
+                      <span className="font-medium">Home</span>
                     </Link>
-                  ))}
-                  {routeList.map((r) => (
-                    <Link key={r.href} href={r.href} onClick={handleMobileLinkClick}>
-                      {r.label}
-                    </Link>
+                  </motion.div>
+
+                  {/* Services Dropdown */}
+                  <motion.div
+                    variants={mobileMenuVariants}
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ delay: 0.2 }}
+                  >
+                    <button
+                      onClick={() => setIsServicesOpen(!isServicesOpen)}
+                      className="w-full flex items-center justify-between p-3 rounded-lg text-slate-700 hover:text-blue-700 transition-all duration-200 group"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <span className="font-medium">Services</span>
+                      </div>
+                      {isServicesOpen ? (
+                        <ChevronDown className="w-4 h-4 text-blue-500 transition-transform" />
+                      ) : (
+                        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                      )}
+                    </button>
+
+                    <AnimatePresence>
+                      {isServicesOpen && (
+                        <motion.div
+                          className="ml-8 mt-2 space-y-1"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {servicesList.map((service, index) => (
+                            <Link
+                              key={service.href}
+                              href={service.href}
+                              onClick={handleMobileLinkClick}
+                              className="block p-3 rounded-lg text-slate-600 hover:text-blue-700 transition-all duration-200 hover:translate-x-1"
+                            >
+                              <span className="text-sm font-medium">
+                                {service.label}
+                              </span>
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+
+                  {/* Other Navigation Links */}
+                  {routeList.map((route, index) => (
+                    <motion.div
+                      key={route.href}
+                      variants={mobileMenuVariants}
+                      initial="hidden"
+                      animate="visible"
+                      transition={{ delay: 0.3 + index * 0.1 }}
+                    >
+                      <Link
+                        href={route.href}
+                        onClick={handleMobileLinkClick}
+                        className="flex items-center space-x-3 p-3 rounded-lg text-slate-700 hover:text-blue-700 transition-all duration-200 group"
+                      >
+                        <div className="text-blue-500 group-hover:text-blue-600 transition-colors">
+                          {route.icon}
+                        </div>
+                        <span className="font-medium">{route.label}</span>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
-                <SheetFooter>
-                  <Separator />
-                </SheetFooter>
               </div>
             </SheetContent>
           </Sheet>
@@ -151,47 +264,68 @@ React.useEffect(() => {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center space-x-6">
-          <Link href="/" className="hover:text-blue-600">Home</Link>
+          <Link
+            href="/"
+            className="hover:text-blue-600 transition-colors duration-200"
+          >
+            Home
+          </Link>
           <div
             onMouseEnter={handleMouseEnterServices}
             onMouseLeave={handleMouseLeaveServices}
             className="relative"
           >
-            <button className="hover:text-blue-600 flex items-center gap-1">
+            <button className="hover:text-blue-600 flex items-center gap-1 transition-colors duration-200">
               Services
               <svg
-                className={`w-4 h-4 ${isServicesOpen ? "rotate-180" : ""}`}
-                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isServicesOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
             <AnimatePresence>
               {isServicesOpen && (
                 <motion.div
-                  className="absolute top-full mt-2 w-64 bg-white shadow-xl rounded-md border border-blue-200/60"
+                  className="absolute top-full mt-2 w-64 bg-white shadow-xl rounded-lg border border-blue-200/60 overflow-hidden"
                   variants={dropdownVariants}
                   initial="hidden"
                   animate="visible"
                   exit="hidden"
+                  transition={{ duration: 0.2 }}
                 >
-                  {servicesList.map((service) => (
+                  {servicesList.map((service, index) => (
                     <Link
                       key={service.href}
                       href={service.href}
                       onClick={handleDesktopServiceLinkClick}
-                      className="block px-4 py-2 hover:bg-blue-50"
+                      className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-200 border-b border-blue-50 last:border-b-0"
                     >
-                      {service.label}
+                      <span className="font-medium text-slate-700 hover:text-blue-700">
+                        {service.label}
+                      </span>
                     </Link>
                   ))}
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-          {routeList.map((r) => (
-            <Link key={r.href} href={r.href} className="hover:text-blue-600">
-              {r.label}
+          {routeList.map((route) => (
+            <Link
+              key={route.href}
+              href={route.href}
+              className="hover:text-blue-600 transition-colors duration-200"
+            >
+              {route.label}
             </Link>
           ))}
         </nav>

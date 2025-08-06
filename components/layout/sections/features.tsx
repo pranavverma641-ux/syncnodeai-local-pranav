@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Award, Target, Users, Lightbulb, Handshake } from "lucide-react";
+import { Award, Target, Users, Lightbulb, Handshake, Shield } from "lucide-react";
 
 const reasons = [
   {
@@ -58,7 +58,7 @@ const reasons = [
     title: "Secure by Design & Compliance-Ready",
     description:
       "We embed security, privacy, and compliance into every layer of our solutions. SyncNodeAI ensures your data environment is resilient, audit-ready, and aligned with best practices in governance and risk management.",
-    icon: Handshake,
+    icon: Shield,
     gradient: "from-[#2368AB] via-[#3A7FD5] to-[#5FA8F5]",
     bgGradient: "from-[#EAF2FB] via-[#F5F9FD] to-[#EAF2FB]",
     iconColor: "text-[#2368AB]",
